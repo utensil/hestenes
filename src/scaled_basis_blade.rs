@@ -1,3 +1,4 @@
+use std::fmt;
 use std::ops::BitXor;
 use dimension::{CountBits, Dimension};
 use ops::OuterProduct;
@@ -53,6 +54,19 @@ impl<R: Real, D: Dimension> From<(R, UnitBasisBlade<D>)> for ScaledBasisBlade<R,
         let (scale, unit_basis_blade) = tuple;
 
         ScaledBasisBlade::new(scale, unit_basis_blade)
+    }
+}
+
+impl<R: Real, D: Dimension> fmt::Display for ScaledBasisBlade<R, D> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error>{
+        write!(f, "{}", self.scale())?;
+        for (i, has_base) in self.unit_basis_blade().basis_vectors().iter().enumerate() {
+            if *has_base {
+                write!(f, "\\boldsymbol{{e}}_{}", i + 1)?;
+            }
+        }
+
+        Ok(())
     }
 }
 
